@@ -1,0 +1,29 @@
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
+import { HttpErrorFilter } from './common/filters/http-exceotion.filter';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  app.useGlobalFilters(new HttpErrorFilter());
+  const config = new DocumentBuilder()
+    .setTitle('Book Store API')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+
+  await app.listen(process.env.PORT ?? 3000);
+}
+bootstrap();
