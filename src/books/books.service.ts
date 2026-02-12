@@ -9,6 +9,7 @@ import { UpdateBookDto } from './dto/update-book.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Book } from './entities/book.entity';
+import { Category } from 'src/categories/entities/category.entity';
 
 @Injectable()
 export class BooksService {
@@ -17,24 +18,43 @@ export class BooksService {
   constructor(
     @InjectRepository(Book)
     private bookRepo: Repository<Book>,
+
+    @InjectRepository(Category)
+    private cateRepo: Repository<Category>,
   ) {}
 
-  async create(createBookDto: CreateBookDto) {
+  async create(dto: CreateBookDto) {
     const existsNo = await this.bookRepo.findOneBy({
-      no: createBookDto.no,
+      no: dto.no,
     });
     if (existsNo) throw new BadRequestException('รหัสหนังสือมีอยู่แล้ว');
+
     const existsName = await this.bookRepo.findOneBy({
-      name: createBookDto.name,
+      name: dto.name,
     });
     if (existsName) throw new BadRequestException('ชื่อหนังสือมีอยู่แล้ว');
 
-    return this.bookRepo.save(this.bookRepo.create(createBookDto));
+    if (dto.categoryId) {
+      const category = await this.cateRepo.findOneBy({
+        id: dto.categoryId,
+      });
+      if (!category) {
+        throw new NotFoundException('ไม่พบหมวดหมู่นี้');
+      }
+    }
+
+    const book = this.bookRepo.create({
+      ...dto,
+      category: { id: dto.categoryId },
+    });
+    return await this.bookRepo.save(book);
   }
 
   findAll() {
     this.logger.log('มีการเรียกดูหนังสือทั้งหมด');
-    return this.bookRepo.find();
+    return this.bookRepo.find({
+      relations: ['category'],
+    });
   }
 
   async findOne(id: number) {

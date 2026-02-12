@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Category } from 'src/categories/entities/category.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Book {
@@ -17,4 +18,9 @@ export class Book {
   @ApiProperty()
   @Column()
   stock: number;
+
+  @ManyToOne(() => Category, (category) => category.books, {
+    onDelete: 'SET NULL',
+  })
+  category: Category;
 }

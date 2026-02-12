@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BooksModule } from './books/books.module';
 import { WinstonModule } from 'nest-winston';
+import { CategoriesModule } from './categories/categories.module';
 import * as winston from 'winston';
 import 'winston-daily-rotate-file';
 
@@ -53,6 +54,7 @@ import 'winston-daily-rotate-file';
       }),
     }),
     BooksModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
