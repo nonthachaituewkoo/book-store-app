@@ -5,4 +5,6 @@ export class UpdateBookDto extends PartialType(CreateBookDto) {
   no?: string | undefined;
   name?: string | undefined;
   stock?: number | undefined;
+  categoryId?: number | undefined;
+  tagIds?: number[] | undefined;
 }

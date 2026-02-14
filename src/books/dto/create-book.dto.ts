@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsArray,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -23,8 +24,13 @@ export class CreateBookDto {
   @Min(0, { message: 'จำนวนสินค้าในสต๊อก จะไม่ติดลบ' })
   stock: number;
 
-  @ApiProperty({ example: '1' })
+  @ApiProperty({ example: 1 })
   @IsNumber()
   @IsOptional()
-  categoryId: number;
+  categoryId?: number;
+
+  @ApiProperty({ example: [1] })
+  @IsArray()
+  @IsOptional()
+  tagIds?: number[];
 }

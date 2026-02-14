@@ -1,6 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Category } from 'src/categories/entities/category.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Tag } from 'src/tags/entities/tag.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Book {
@@ -23,4 +31,8 @@ export class Book {
     onDelete: 'SET NULL',
   })
   category: Category;
+
+  @ManyToMany(() => Tag, (tag) => tag.books, { cascade: true })
+  @JoinTable()
+  tags: Tag[];
 }
