@@ -1,4 +1,3 @@
-import { LogMessage } from './../../../../dog-app/node_modules/typeorm/browser/logger/Logger.d';
 import {
   ArgumentsHost,
   Catch,
@@ -7,7 +6,6 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import path from 'path';
 
 @Catch(HttpException)
 export class HttpErrorFilter implements ExceptionFilter {
@@ -30,7 +28,7 @@ export class HttpErrorFilter implements ExceptionFilter {
       `${request.method} ${request.url}`,
       JSON.stringify(LogMessage),
     );
-    
+
     response.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),

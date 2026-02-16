@@ -7,6 +7,8 @@ import { BooksModule } from './books/books.module';
 import { WinstonModule } from 'nest-winston';
 import { CategoriesModule } from './categories/categories.module';
 import { TagsModule } from './tags/tags.module';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 import * as winston from 'winston';
 import 'winston-daily-rotate-file';
 
@@ -57,6 +59,8 @@ import 'winston-daily-rotate-file';
     BooksModule,
     CategoriesModule,
     TagsModule,
+    UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
